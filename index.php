@@ -3,192 +3,163 @@
 <title>
 Server Status
 </title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/asPieProgress.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/jquery-asPieProgress.min.js"></script>
+<style type="text/css">
+body {
+    /*padding-top: 60px;*/
+}
+.pie_progress {
+width: 160px;
+margin: 10px auto;
+}
+@media all and (max-width: 768px) {
+    .pie_progress {
+    width: 80%;
+        max-width: 300px;
+    }
+}
+pre{
+height: 250px;
+overflow: scroll;
+}
+.title{
+height: 50px;
+}
+</style>
 </head>
 <body>
-<?php
-    function get_server_memory_usage(){
-        
-        $free = shell_exec('free');
-        $free = (string)trim($free);
-        $free_arr = explode("\n", $free);
-        $mem = explode(" ", $free_arr[1]);
-        $mem = array_filter($mem);
-        $mem = array_merge($mem);
-        $memory_usage = $mem[2]/$mem[1]*100;
-        
-        return $memory_usage;
-    }
-    function get_server_cpu_usage(){
-        
-        $load = sys_getloadavg();
-        return $load[0];
-        
-    }
-    function system_load($coreCount = 2, $interval = 1) {
-        $rs = sys_getloadavg();
-        $interval = $interval >= 1 && 3 <= $interval ? $interval : 1;
-        $load = $rs[$interval];
-        return round(($load * 100) / $coreCount,2);
-    }
-    function system_cores() {
-        
-        $cmd = "uname";
-        $OS = strtolower(trim(shell_exec($cmd)));
-        
-        switch($OS) {
-            case('linux'):
-                $cmd = "cat /proc/cpuinfo | grep processor | wc -l";
-                break;
-            case('freebsd'):
-                $cmd = "sysctl -a | grep 'hw.ncpu' | cut -d ':' -f2";
-                break;
-            default:
-                unset($cmd);
-        }
-        
-        if ($cmd != '') {
-            $cpuCoreNo = intval(trim(shell_exec($cmd)));
-        }
-        
-        return empty($cpuCoreNo) ? 1 : $cpuCoreNo;
-        
-    }
-    function http_connections() {
-        
-        if (function_exists('exec')) {
-            
-            $www_total_count = 0;
-            @exec ('netstat -an | egrep \':80|:443\' | awk \'{print $5}\' | grep -v \':::\*\' |  grep -v \'0.0.0.0\'', $results);
-            
-            foreach ($results as $result) {
-                $array = explode(':', $result);
-                $www_total_count ++;
-                
-                if (preg_match('/^::/', $result)) {
-                    $ipaddr = $array[3];
-                } else {
-                    $ipaddr = $array[0];
-                }
-                
-                if (!in_array($ipaddr, $unique)) {
-                    $unique[] = $ipaddr;
-                    $www_unique_count ++;
-                }
-            }
-            
-            unset ($results);
-            
-            return count($unique);
-            
-        }
-        
-    }
-    
-    function server_memory_usage() {
-        
-        $free = shell_exec('free');
-        $free = (string)trim($free);
-        $free_arr = explode("\n", $free);
-        $mem = explode(" ", $free_arr[1]);
-        $mem = array_filter($mem);
-        $mem = array_merge($mem);
-        $memory_usage = $mem[2] / $mem[1] * 100;
-        
-        return $memory_usage;
-        
-    }
-    
-    function disk_usage() {
-        
-        $disktotal = disk_total_space ('/');
-        $diskfree  = disk_free_space  ('/');
-        $diskuse   = round (100 - (($diskfree / $disktotal) * 100)) .'%';
-        
-        return $diskuse;
-        
-    }
-    function server_uptime() {
-        
-        $uptime = floor(preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime')) / 86400);
-        
-        return $uptime;
-        
-    }
-    function kernel_version() {
-        
-        $kernel = explode(' ', file_get_contents('/proc/version'));
-        $kernel = $kernel[2];
-        
-        return $kernel;
-        
-    }
-    function number_processes() {
-        
-        $proc_count = 0;
-        $dh = opendir('/proc');
-        
-        while ($dir = readdir($dh)) {
-            if (is_dir('/proc/' . $dir)) {
-                if (preg_match('/^[0-9]+$/', $dir)) {
-                    $proc_count ++;
-                }
-            }
-        }
-        
-        return $proc_count;
-        
-    }
-    function memory_usage() {
-        
-        $mem = memory_get_usage(true);
-        
-        if ($mem < 1024) {
-            
-            $$memory = $mem .' B';
-            
-        } elseif ($mem < 1048576) {
-            
-            $memory = round($mem / 1024, 2) .' KB';
-            
-        } else {
-            
-            $memory = round($mem / 1048576, 2) .' MB';
-            
-        }
-        
-        return $memory;
-        
-    }
-    function cpu_temp(){
-        //Function requires the package lm-sensors.
-        $checkinstalled = shell_exec('dpkg -s lm-sensors | grep -o "Status: .*"');
-        if (substr($checkinstalled, 0, -1) == 'Status: install ok installed'){
-            return shell_exec('sensors | grep -o "id 0:  +.*" | cut -f2- -d+ | cut -b-4');
-        }
-        else{
-            return 'lm-sensors not installed: error '.$checkinstalled;
-        }
-    }
-    echo '<h1>Server Monitor v0.1</h1>';
-    echo '<h2>'.gethostname().'@'.$_SERVER['SERVER_ADDR'].'</h2>';
-    ?>
+<nav class="navbar navbar-dark bg-primary mb-5">
+<a class="navbar-brand" href="#">Server Monitor v0.2</a>
+<div id="navbarText">
+<ul class="navbar-nav mr-auto">
+</ul>
+<span class="navbar-text">
+<?php echo ''.gethostname().'@'.$_SERVER['SERVER_ADDR'].'';?>
+</span>
+</div>
+</nav>
+<div class="container">
+<div class="row">
+<div class="col-xs col-sm-4 col-md col-lg" id="cpuDiv">
+<div class="pie_progress_cpu" role="progressbar" data-goal="33">
+<div class="pie_progress__number">0%</div>
+<div class="pie_progress__label">CPU</div>
+</div>
+<h3>CPU</h3>
+<div class='title'>i7 4770</div>
+</div>
+<div class="col-xs col-sm-4 col-md col-lg" id="memDiv">
+<div class="pie_progress_mem" role="progressbar" data-goal="33">
+<div class="pie_progress__number">0%</div>
+<div class="pie_progress__label">Memory</div>
+</div>
+<h3>Memory</h3>
+<div class='title'>16GB</div>
+</div>
+<div class="col-xs col-sm-4 col-md col-lg" id="diskDiv">
+<div class="pie_progress_disk" role="progressbar" data-goal="33">
+<div class="pie_progress__number">0%</div>
+<div class="pie_progress__label">Disk</div>
+</div>
+<h3>Disk</h3>
+<div class='title'>240 GB</div>
+</div>
+<div class="col-xs col-sm-4 col-md col-lg" id="temperatureDiv">
+<div class="pie_progress_temperature" role="progressbar" data-goal="0">
+<div class="pie_progress__number">0°C</div>
+<div class="pie_progress__label">Temperature</div>
+</div>
+<h3>Temperature</h3>
+<div class='title'></div>
+</div>
+</div>
+</div>
+</div>
+
 
 <div id='data'>
 
 </div>
 
 <script>
-function loadlink(){
+$(document).ready(function () {
+       $('.pie_progress_temperature').asPieProgress({
+                                                                                                             min: 0,
+                                                                                                             max: 100,
+                                                                                                             goal: 100,
+                                                                                                             numberCallback(n) {
+                                                                                                             'use strict';
+                                                                                                             const percentage = Math.round(this.getPercentage(n));
+                                                                                                             return `${percentage}°C`;
+                                                                                                             },
+                                                    barcolor: '#428bca',
+                                                    trackcolor: '#f2f2f2',
+                                                                                                             
+                  });
+                  $('.pie_progress_cpu, .pie_progress_mem, .pie_progress_disk').asPieProgress({
+                                                                                                                        min: 0,
+                                                                                                                        max: 100,
+                                                                                                                        goal: 100,
+                                                                                                                        numberCallback(n) {
+                                                                                                                        'use strict';
+                                                                                                                        const percentage = Math.round(this.getPercentage(n));
+                                                                                                                        return `${percentage}%`;
+                                                                                                                        },
+                                                                                              barcolor: '#428bca',
+                                                                                              trackcolor: '#f2f2f2',
+                                                                                                                        
+                                                                                                                        });
+       });
+
+$('.pie_progress_temperature').asPieProgress("start");
+
+/*function loadlink(){
     $('#data').load('data.php',function () {
                      $(this).unwrap();
                      });
 }
-loadlink(); // This will run on page load
+loadlink(); // This will run on page load*/
 setInterval(function(){
-            loadlink() // this will run after every 5 seconds
-            }, 5000);
-update();
+            
+            $.get('data/cpu.php', function(data) {
+                  cpudata = data;
+                  });
+            //loadlink() // this will run after every 5 seconds
+            $('.pie_progress_cpu').asPieProgress("go",cpudata);
+            
+            $.get('data/mem.php', function(data) {
+                  memdata = data;
+                  });
+            //loadlink() // this will run after every 5 seconds
+            $('.pie_progress_mem').asPieProgress("go",memdata);
+            
+            $.get('data/disk.php', function(data) {
+                  diskdata = data;
+                  });
+            //loadlink() // this will run after every 5 seconds
+            $('.pie_progress_disk').asPieProgress("go",diskdata);
+            
+            $.get('data/temp.php', function(data) {
+                  tempdata = data;
+                  });
+            //loadlink() // this will run after every 5 seconds
+            $('.pie_progress_temperature').asPieProgress("go",tempdata);
+            
+            $.get('data/disk.php', function(data) {
+                  diskdata = data;
+                  });
+            //loadlink() // this will run after every 5 seconds
+            $('.pie_progress_disk').asPieProgress("go",diskdata);
+            }, 1000);
 </script>
+
+
 </body>
 </html>
