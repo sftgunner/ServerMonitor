@@ -109,7 +109,7 @@ $(document).ready(function () {
                                                                                                                         goal: 100,
                                                                                                                         numberCallback(n) {
                                                                                                                         'use strict';
-                                                                                                                        const percentage = Math.round(this.getPercentage(n));
+                                                                                                                        const percentage = (this.getPercentage(n));
                                                                                                                         return `${percentage}%`;
                                                                                                                         },
                                                                                               barcolor: '#428bca',
