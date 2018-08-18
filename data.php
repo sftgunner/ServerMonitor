@@ -1,11 +1,3 @@
-<html>
-<head>
-<title>
-Server Status
-</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</head>
-<body>
 <?php
     function get_server_memory_usage(){
         
@@ -170,25 +162,22 @@ Server Status
             return 'lm-sensors not installed: error '.$checkinstalled;
         }
     }
-    echo '<h1>Server Monitor v0.1</h1>';
-    echo '<h2>'.gethostname().'@'.$_SERVER['SERVER_ADDR'].'</h2>';
     ?>
 
-<div id='data'>
-
+<div id='status'>
+<?php
+    echo '<h4>Last refreshed:'.time().'</h4>';
+    echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
+    echo '<h4>get_server_cpu_usage(): '.get_server_cpu_usage().'</h4>';
+    echo '<h4>cpu_temp(): '.cpu_temp().'</h4>';
+    echo '<h4>system_load(): '.system_load().'</h4>';
+    echo '<h4>system_cores(): '.system_cores().'</h4>';
+    echo '<h4>http_connections(): '.http_connections().'</h4>';
+    echo '<h4>server_memory_usage(): '.server_memory_usage().'</h4>';
+    echo '<h4>disk_usage(): '.disk_usage().'</h4>';
+    echo '<h4>server_uptime(): '.server_uptime().' hours</h4>';
+    echo '<h4>kernel_version(): '.kernel_version().'</h4>';
+    echo '<h4>number_processes(): '.number_processes().'</h4>';
+    echo '<h4>memory_usage(): '.memory_usage().'</h4>';
+    ?>
 </div>
-
-<script>
-function loadlink(){
-    $('#data').load('data.php',function () {
-                     $(this).unwrap();
-                     });
-}
-loadlink(); // This will run on page load
-setInterval(function(){
-            loadlink() // this will run after every 5 seconds
-            }, 5000);
-update();
-</script>
-</body>
-</html>
