@@ -194,7 +194,7 @@ Server Status
 
 <script>
 function update() {
-    $.ajax({url: "http://jeeves.gunner.systems/status.php", cache:false, success: function (result) {
+    $.ajax({url: "http://jeeves.gunner.systems/ServerMonitor/index.php", cache:false, success: function (result) {
            $('#status').html(result);
            setTimeout(function(){update()}, 5000);
            }});
