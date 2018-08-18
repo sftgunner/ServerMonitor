@@ -155,11 +155,11 @@
     function cpu_temp(){
         //Function requires the package lm-sensors.
         $checkinstalled = shell_exec('dpkg -s lm-sensors | grep -o "Status: .*"');
-        if ($checkinstalled == "Status: install ok installed"){
+        if ($checkinstalled == 'Status: install ok installed'){
             return shell_exec('sensors | grep -o "id 0:  +.*" | cut -f2- -d+ | cut -b-4');
         }
         else{
-            return 'lm-sensors not installed: error '.$checkinstalled;
+            return 'lm-sensors not installed: error '.html_entity_decode($checkinstalled);
         }
     }
     echo '<h1>Server Monitor v0.1</h1>';
