@@ -7,9 +7,14 @@
         $mem = explode(" ", $free_arr[1]);
         $mem = array_filter($mem);
         $mem = array_merge($mem);
-        $memory_usage = $mem[2]/$mem[1]*100;
-        
-        return $memory_usage;
+        if ($mem[1] == 0){
+            return 0;
+        }
+        else{
+            $memory_usage = $mem[2]/$mem[1]*100;
+            
+            return $memory_usage;
+        }
     }
     function get_server_cpu_usage(){
         
@@ -85,9 +90,14 @@
         $mem = explode(" ", $free_arr[1]);
         $mem = array_filter($mem);
         $mem = array_merge($mem);
-        $memory_usage = $mem[2] / $mem[1] * 100;
-        
-        return $memory_usage;
+        if ($mem[1] == 0){
+            return 0;
+        }
+        else{
+            $memory_usage = $mem[2]/$mem[1]*100;
+            
+            return $memory_usage;
+        }
         
     }
     
@@ -101,23 +111,26 @@
         
     }
     function server_uptime() {
-        
+        if (file_exists('/proc/uptime')){
         $uptime = floor(preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime')) / 86400);
         
         return $uptime;
+        }
         
     }
     function kernel_version() {
-        
+        if (file_exists('/proc/version')){
         $kernel = explode(' ', file_get_contents('/proc/version'));
         $kernel = $kernel[2];
         
-        return $kernel;
+            return $kernel;
+        }
         
     }
     function number_processes() {
         
         $proc_count = 0;
+        if (file_exists('/proc')){
         $dh = opendir('/proc');
         
         while ($dir = readdir($dh)) {
@@ -129,6 +142,7 @@
         }
         
         return $proc_count;
+        }
         
     }
     function memory_usage() {
@@ -164,7 +178,6 @@
     }
     ?>
 
-<div id='status'>
 <?php
     echo '<h4>Last refreshed:'.time().'</h4>';
     echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
@@ -180,4 +193,3 @@
     echo '<h4>number_processes(): '.number_processes().'</h4>';
     echo '<h4>memory_usage(): '.memory_usage().'</h4>';
     ?>
-</div>

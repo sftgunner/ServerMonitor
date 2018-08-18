@@ -81,11 +81,11 @@ height: 50px;
 </div>
 </div>
 </div>
+<hr style="color:white;background:white;">
+<h3 class="container">Verbose data</h3>
+<div id='data' class="container">
+
 </div>
-
-
-<div id='data'>
-
 </div>
 
 <script>
@@ -126,45 +126,41 @@ $(document).ready(function () {
                                                                                                                         });
        });
 
-$('.pie_progress_temperature').asPieProgress("start");
 
-/*function loadlink(){
+function loadlink(){
     $('#data').load('data.php',function () {
                      $(this).unwrap();
                      });
 }
-loadlink(); // This will run on page load*/
+loadlink(); // This will run on page load
 setInterval(function(){
             
             $.get('data/cpu.php', function(data) {
                   cpudata = data;
                   });
-            //loadlink() // this will run after every 5 seconds
             $('.pie_progress_cpu').asPieProgress("go",cpudata);
             
             $.get('data/mem.php', function(data) {
                   memdata = data;
                   });
-            //loadlink() // this will run after every 5 seconds
             $('.pie_progress_mem').asPieProgress("go",memdata);
             
             $.get('data/disk.php', function(data) {
                   diskdata = data;
                   });
-            //loadlink() // this will run after every 5 seconds
             $('.pie_progress_disk').asPieProgress("go",diskdata);
             
             $.get('data/temp.php', function(data) {
                   tempdata = data;
                   });
-            //loadlink() // this will run after every 5 seconds
             $('.pie_progress_temperature').asPieProgress("go",tempdata);
             
             $.get('data/disk.php', function(data) {
                   diskdata = data;
                   });
-            //loadlink() // this will run after every 5 seconds
             $('.pie_progress_disk').asPieProgress("go",diskdata);
+            
+            loadlink();
             }, 1000);
 </script>
 
