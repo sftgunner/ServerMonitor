@@ -184,5 +184,19 @@ Server Status
     echo '<h4>number_processes(): '.number_processes().'</h4>';
     echo '<h4>memory_usage(): '.memory_usage().'</h4>';
     ?>
+
+<div style='width:300px' id='status'>
+
+</div>
+
+<script>
+function update() {
+    $.ajax({url: "http://jeeves.gunner.systems/status.php", cache:false, success: function (result) {
+           $('#status').html(result);
+           setTimeout(function(){update()}, 5000);
+           }});
+}
+update();
+</script>
 </body>
 </html>
