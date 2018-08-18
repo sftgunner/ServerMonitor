@@ -162,6 +162,7 @@
             return 'lm-sensors not installed';
         }
     }
+    echo '<h1>Server Monitor v0.1</h1>';
     echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
     echo '<h4>get_server_cpu_usage(): '.get_server_cpu_usage().'</h4>';
     echo '<h4>system_load(): '.system_load().'</h4>';
