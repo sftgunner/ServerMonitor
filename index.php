@@ -3,6 +3,7 @@
 <title>
 Server Status
 </title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
 <?php
@@ -173,7 +174,7 @@ Server Status
     echo '<h2>'.gethostname().'@'.$_SERVER['SERVER_ADDR'].'</h2>';
     ?>
 
-<div style='width:300px' id='status'>
+<div id='status'>
 <?php
     echo '<h4>Last refreshed:'.time().'</h4>';
     echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
