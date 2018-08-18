@@ -159,7 +159,7 @@
             return shell_exec('sensors | grep -o "id 0:  +.*" | cut -f2- -d+ | cut -b-4');
         }
         else{
-            return 'lm-sensors not installed';
+            return 'lm-sensors not installed: error '.$checkinstalled;
         }
     }
     echo '<h1>Server Monitor v0.1</h1>';
