@@ -6,6 +6,7 @@
             echo shell_exec('sensors | grep -o "id 0:  +.*" | cut -f2- -d+ | cut -b-4');
         }
         else{
-            echo 'lm-sensors not installed: error '.$checkinstalled;
+            //echo 'lm-sensors not installed: error '.$checkinstalled;
+            echo 0;
         }
     ?>

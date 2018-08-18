@@ -89,6 +89,14 @@ height: 50px;
 </div>
 
 <script>
+function decimalplace(input){
+    if (input >= 10){
+        return Math.round(input*10)/10;
+    }
+    else{
+        return Math.round(input*100)/100;
+    }
+}
 $(document).ready(function () {
        $('.pie_progress_temperature').asPieProgress({
                                                                                                              min: 0,
@@ -109,7 +117,7 @@ $(document).ready(function () {
                                                                                                                         goal: 100,
                                                                                                                         numberCallback(n) {
                                                                                                                         'use strict';
-                                                                                                                        const percentage = (this.getPercentage(n));
+                                                                                                                        const percentage = decimalplace(this.getPercentage(n));
                                                                                                                         return `${percentage}%`;
                                                                                                                         },
                                                                                               barcolor: '#428bca',
