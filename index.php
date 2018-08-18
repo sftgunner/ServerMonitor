@@ -152,6 +152,16 @@
         return $memory;
         
     }
+    function cputemp(){
+        //Function requires the package lm-sensors.
+        $checkinstalled = shell_exec('dpkg -s lm-sensors | grep -o "Status: .*"');
+        if ($checkinstalled == "Status: install ok installed"){
+        return shell_exec('sensors | grep -o "id 0:  +.*" | cut -f2- -d+ | cut -b-4');
+        }
+        else{
+            return 'lm-sensors not installed';
+        }
+    }
     echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
     echo '<h4>get_server_cpu_usage(): '.get_server_cpu_usage().'</h4>';
     echo '<h4>system_load(): '.system_load().'</h4>';
@@ -159,8 +169,9 @@
     echo '<h4>http_connections(): '.http_connections().'</h4>';
     echo '<h4>server_memory_usage(): '.server_memory_usage().'</h4>';
     echo '<h4>disk_usage(): '.disk_usage().'</h4>';
-    echo '<h4>server_uptime(): '.server_uptime().'</h4>';
+    echo '<h4>server_uptime(): '.server_uptime().' hours</h4>';
     echo '<h4>kernel_version(): '.kernel_version().'</h4>';
     echo '<h4>number_processes(): '.number_processes().'</h4>';
     echo '<h4>memory_usage(): '.memory_usage().'</h4>';
+    echo '<h4>cpu_temp(): '.cpu_temp().'</h4>';
     ?>
