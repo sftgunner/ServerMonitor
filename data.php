@@ -176,6 +176,12 @@
             return 'lm-sensors not installed: error '.$checkinstalled;
         }
     }
+    function cpu_model(){
+        if (file_exists('/proc/cpuinfo')){
+        $file = file('/proc/cpuinfo');
+        return $file[4];
+        }
+    }
     ?>
 
 <?php
@@ -184,6 +190,7 @@
     echo '<h4>get_server_cpu_usage(): '.get_server_cpu_usage().'</h4>';
     echo '<h4>cpu_temp(): '.cpu_temp().'</h4>';
     echo '<h4>system_load(): '.system_load().'</h4>';
+    echo '<h4>cpu_model(): '.cpu_model().'</h4>';
     echo '<h4>system_cores(): '.system_cores().'</h4>';
     echo '<h4>http_connections(): '.http_connections().'</h4>';
     echo '<h4>server_memory_usage(): '.server_memory_usage().'</h4>';
