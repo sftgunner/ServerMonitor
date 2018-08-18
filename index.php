@@ -1,3 +1,10 @@
+<html>
+<head>
+<title>
+Server Status
+</title>
+</head>
+<body>
 <?php
     function get_server_memory_usage(){
         
@@ -163,6 +170,7 @@
         }
     }
     echo '<h1>Server Monitor v0.1</h1>';
+    echo '<h2>'.gethostname().'</h2>';
     echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
     echo '<h4>get_server_cpu_usage(): '.get_server_cpu_usage().'</h4>';
     echo '<h4>cpu_temp(): '.cpu_temp().'</h4>';
@@ -176,3 +184,5 @@
     echo '<h4>number_processes(): '.number_processes().'</h4>';
     echo '<h4>memory_usage(): '.memory_usage().'</h4>';
     ?>
+</body>
+</html>
