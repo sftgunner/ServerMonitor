@@ -34,7 +34,7 @@ height: 50px;
 }
 </style>
 </head>
-<body>
+<body class="text-light bg-dark">
 <nav class="navbar navbar-dark bg-primary mb-5">
 <a class="navbar-brand" href="#">Server Monitor v0.2</a>
 <div id="navbarText">
@@ -52,32 +52,32 @@ height: 50px;
 <div class="pie_progress__number">0%</div>
 <div class="pie_progress__label">CPU</div>
 </div>
-<h3>CPU</h3>
-<div class='title'>i7 4770</div>
+<h3 style="text-align:center;">CPU</h3>
+<div style="text-align:center;" class='title'>i7 4770</div>
 </div>
 <div class="col-xs col-sm-4 col-md col-lg" id="memDiv">
 <div class="pie_progress_mem" role="progressbar" data-goal="33">
 <div class="pie_progress__number">0%</div>
 <div class="pie_progress__label">Memory</div>
 </div>
-<h3>Memory</h3>
-<div class='title'>16GB</div>
+<h3 style="text-align:center;">Memory</h3>
+<div style="text-align:center;" class='title'>16GB</div>
 </div>
 <div class="col-xs col-sm-4 col-md col-lg" id="diskDiv">
 <div class="pie_progress_disk" role="progressbar" data-goal="33">
 <div class="pie_progress__number">0%</div>
 <div class="pie_progress__label">Disk</div>
 </div>
-<h3>Disk</h3>
-<div class='title'>240 GB</div>
+<h3 style="text-align:center;">Disk</h3>
+<div style="text-align:center;" class='title'>240 GB</div>
 </div>
 <div class="col-xs col-sm-4 col-md col-lg" id="temperatureDiv">
 <div class="pie_progress_temperature" role="progressbar" data-goal="0">
 <div class="pie_progress__number">0°C</div>
 <div class="pie_progress__label">Temperature</div>
 </div>
-<h3>Temperature</h3>
-<div class='title'></div>
+<h3 style="text-align:center;">Temperature</h3>
+<div style="text-align:center;" class='title'></div>
 </div>
 </div>
 </div>
