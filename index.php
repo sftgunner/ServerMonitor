@@ -171,6 +171,11 @@ Server Status
     }
     echo '<h1>Server Monitor v0.1</h1>';
     echo '<h2>'.gethostname().'@'.$_SERVER['SERVER_ADDR'].'</h2>';
+    ?>
+
+<div style='width:300px' id='status'>
+<?php
+    echo '<h4>Last refreshed:'.time().'</h4>';
     echo '<h4>get_server_memory_usage(): '.get_server_memory_usage().'</h4>';
     echo '<h4>get_server_cpu_usage(): '.get_server_cpu_usage().'</h4>';
     echo '<h4>cpu_temp(): '.cpu_temp().'</h4>';
@@ -184,9 +189,6 @@ Server Status
     echo '<h4>number_processes(): '.number_processes().'</h4>';
     echo '<h4>memory_usage(): '.memory_usage().'</h4>';
     ?>
-
-<div style='width:300px' id='status'>
-
 </div>
 
 <script>
