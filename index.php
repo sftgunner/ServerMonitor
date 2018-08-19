@@ -1,3 +1,12 @@
+<?php
+    function formatBytes($size, $precision = 2)
+    {
+        $base = log($size, 1024);
+        $suffixes = array('', 'K', 'M', 'G', 'T');
+        
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)].'B';
+    }
+    ?>
 <html>
 <head>
 <title>
@@ -69,7 +78,7 @@ height: 50px;
 <div class="pie_progress__label">Disk</div>
 </div>
 <h3 style="text-align:center;">Disk</h3>
-<div style="text-align:center;" class='title'>240 GB</div>
+<div style="text-align:center;" class='title'><?php echo formatBytes(disk_total_space('/'));?></div>
 </div>
 <div class="col-xs col-sm-4 col-md col-lg" id="temperatureDiv">
 <div class="pie_progress_temperature" role="progressbar" data-goal="0">
